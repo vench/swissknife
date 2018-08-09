@@ -15,7 +15,7 @@ type WebApp struct {
 }
 
 //
-func (a *WebApp) renderJSONFastHttp(ctx *fasthttp.RequestCtx) {
+func (a *WebApp) RenderJSONFastHttp(ctx *fasthttp.RequestCtx) {
 	ctx.Response.Header.SetCanonical([]byte(`Content-Type`), []byte(`application/json`))
 	ctx.SetStatusCode(a.Response.Code)
 
