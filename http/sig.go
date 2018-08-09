@@ -6,10 +6,12 @@ import (
 	"bytes"
 	"sort"
 	"crypto/md5"
+	"fmt"
 )
 
 const (
-	SIG_GLUE = '='
+	SIG_GLUE_KEY_VALUE = '='
+	SIG_GLUE_PAIR = '|'
 )
 
 //
@@ -30,7 +32,7 @@ type Pair struct {
 
 //
 func CheckSigFastHttp(ctx *fasthttp.RequestCtx, secret, sigKey string) bool {
-	var pairs = make([]Pair, ctx.QueryArgs().Len())
+	var pairs = make([]Pair, 0)
 	ctx.QueryArgs().VisitAll(func(key, value []byte) {
 		if !strings.EqualFold(sigKey, string(key)) {
 			pairs = append(pairs, Pair{key, value})
@@ -41,16 +43,21 @@ func CheckSigFastHttp(ctx *fasthttp.RequestCtx, secret, sigKey string) bool {
 	if err != nil {
 		return false
 	}
-	if bytes.Equal(ctx.QueryArgs().Peek(sigKey), sig) {
+	if !ctx.QueryArgs().Has(sigKey) {
 		return false
 	}
+
+	if !strings.EqualFold(sig, string(ctx.QueryArgs().Peek(sigKey))) {
+		return  false
+	}
+
 	return true
 }
 
 //
-func makeSig(pairs []Pair, secret string) ([]byte, error) {
+func makeSig(pairs []Pair, secret string) (string, error) {
 	sort.Slice(pairs, func(i, j int) bool {
-		return bytes.Compare(pairs[i].key, pairs[j].key) > 0
+		return bytes.Compare(pairs[i].key, pairs[j].key) < 0
 	})
 
 	var (
@@ -58,12 +65,15 @@ func makeSig(pairs []Pair, secret string) ([]byte, error) {
 	)
 
 	for n := 0; n < len(pairs); n ++ {
+		if n > 0 {
+			sig = append(sig, SIG_GLUE_PAIR)
+		}
 		sig = append(sig, pairs[n].key...)
-		sig = append(sig, SIG_GLUE)
+		sig = append(sig, SIG_GLUE_KEY_VALUE)
 		sig = append(sig, pairs[n].value...)
 	}
 
 	sig = append(sig, []byte(secret)...)
 	h := md5.Sum(sig)
-	return h[:], nil
+	return fmt.Sprintf(`%x`, h), nil
 }
