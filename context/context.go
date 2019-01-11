@@ -87,7 +87,7 @@ func FastHttpRouter(ctx context.Context) (*fasthttprouter.Router, bool) {
 }
 
 //
-func RedisClients(ctx context.Context) (*[]*redis.Client, bool) {
-	clients, ok := ctx.Value(redisClientsKey).(*[]*redis.Client)
+func RedisClients(ctx context.Context) ([]*redis.Client, bool) {
+	clients, ok := ctx.Value(redisClientsKey).([]*redis.Client)
 	return clients, ok
 }
