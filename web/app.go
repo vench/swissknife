@@ -3,10 +3,16 @@ package web
 import (
 	"github.com/valyala/fasthttp"
 	"encoding/json"
+	"strconv"
+	"context"
+	"fmt"
 )
 
 //
 type WebApp struct {
+
+	ctx context.Context
+
 	//
 	Response struct {
 		Code int         `json:"code"`
@@ -26,4 +32,23 @@ func (a *WebApp) RenderJSONFastHttp(ctx *fasthttp.RequestCtx) {
 		return
 	}
 	ctx.SetBody(response)
+}
+
+//
+func (a *WebApp) UserValueInt(ctx *fasthttp.RequestCtx, key string) (val int64) {
+	valStr := fmt.Sprintf(`%s`, ctx.UserValue(key))
+	val, err := strconv.ParseInt(valStr, 10,64)
+	if err != nil {
+		val = 0
+	}
+	return val
+}
+
+//
+func (a *WebApp) UserValueString(ctx *fasthttp.RequestCtx, key string) (string) {
+	s :=  ctx.UserValue(key)
+	if s == nil {
+		return ""
+	}
+	return fmt.Sprintf(`%s`, s)
 }
