@@ -11,7 +11,7 @@ import (
 //
 type WebApp struct {
 
-	ctx context.Context
+	Ctx context.Context
 
 	//
 	Response struct {
