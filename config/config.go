@@ -21,13 +21,6 @@ var (
 )
 
 //
-func init() {
-	if path, ok := os.LookupEnv(envConfigFilePath); ok {
-		configPath = path
-	}
-}
-
-//
 type database struct {
 	Ip       	 string `default:"localhost"`
 	Database 	 string `default:"default"`
@@ -55,6 +48,10 @@ var config =  struct {
 func ConfigLoad() {
 	if !isLoad {
 		isLoad = true
+
+		if path, ok := os.LookupEnv(envConfigFilePath); ok {
+			configPath = path
+		}
 
 		err := configor.Load(&config, configPath)
 		if err != nil {
