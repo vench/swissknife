@@ -14,7 +14,7 @@ var (
 //
 func MysqlOneConnect() *sql.DB {
 	if !mysqlConnectOpen {
-		conn := NewClickHouseConnect(config.Mysql)
+		conn := NewMysqlConnect(config.Mysql)
 		mysqlConnectOpen = true
 		mysqlConnect = conn
 	}
