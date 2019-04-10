@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"github.com/buaazp/fasthttprouter"
+	"encoding/json"
 	scontext "github.com/vench/swissknife/context"
 	"context"
 )
@@ -79,4 +80,13 @@ func CreateSwissKnifeContext() context.Context {
 		router	)
 
 	return ctx
+}
+
+//
+func ConfigPrint() {
+	out, err := json.Marshal(config)
+	if err != nil {
+		panic (err)
+	}
+	fmt.Println(string(out))
 }
