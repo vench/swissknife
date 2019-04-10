@@ -37,7 +37,7 @@ func NewMysqlConnect(conf *database) *sql.DB {
 		conf.Ip,
 		conf.Port,
 		conf.Database)
-
+	fmt.Println(connStr)
 	d, e := sql.Open("mysql", connStr)
 	if e != nil {
 		return nil
