@@ -19,6 +19,7 @@ const (
 var (
 	configPath = "./cmd/config.yml"
 	isLoad     = false
+	config = ConfigBase{}
 )
 
 //
@@ -32,8 +33,7 @@ type database struct {
 	MaxOpenConn  int    `default:"0"`
 }
 
-//
-var config =  struct {
+type ConfigBase struct {
 	ClickHouse 	*database
 	Mysql		*database
 	Web struct {
@@ -43,26 +43,32 @@ var config =  struct {
 	Redis struct {
 		List []string `default:"[localhost:6379]"`
 	}
-}{}
+}
+
 
 //
 func ConfigLoad() {
-	if !isLoad {
-		isLoad = true
-		ConfigLoadStruct(&config)
-	}
+	configLoad(&config)
 }
 
 //
 func ConfigLoadStruct(confStr interface{}) {
-	if path, ok := os.LookupEnv(envConfigFilePath); ok {
-		configPath = path
-	}
+	configLoad(confStr)
+}
 
-	err := configor.Load(confStr, configPath)
-	if err != nil {
-		log.Fatal("ConfigLoad: ", err)
-		os.Exit(1)
+//
+func configLoad(c interface{}) {
+	if !isLoad {
+		isLoad = true
+		if path, ok := os.LookupEnv(envConfigFilePath); ok {
+			configPath = path
+		}
+
+		err := configor.Load(c, configPath)
+		if err != nil {
+			log.Fatal("ConfigLoad: ", err)
+			os.Exit(1)
+		}
 	}
 }
 
