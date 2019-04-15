@@ -49,16 +49,20 @@ var config =  struct {
 func ConfigLoad() {
 	if !isLoad {
 		isLoad = true
+		ConfigLoadStruct(&config)
+	}
+}
 
-		if path, ok := os.LookupEnv(envConfigFilePath); ok {
-			configPath = path
-		}
+//
+func ConfigLoadStruct(confStr interface{}) {
+	if path, ok := os.LookupEnv(envConfigFilePath); ok {
+		configPath = path
+	}
 
-		err := configor.Load(&config, configPath)
-		if err != nil {
-			log.Fatal("ConfigLoad: ", err)
-			os.Exit(1)
-		}
+	err := configor.Load(confStr, configPath)
+	if err != nil {
+		log.Fatal("ConfigLoad: ", err)
+		os.Exit(1)
 	}
 }
 
