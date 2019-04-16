@@ -23,7 +23,7 @@ var (
 )
 
 //
-type database struct {
+type Database struct {
 	Ip       	 string `default:"localhost"`
 	Database 	 string `default:"default"`
 	Username 	 string `default:""`
@@ -34,8 +34,8 @@ type database struct {
 }
 
 type ConfigBase struct {
-	ClickHouse 	*database
-	Mysql		*database
+	ClickHouse 	*Database
+	Mysql		*Database
 	Web struct {
 		Ip   string `default:"0.0.0.0"`
 		Port uint   `default:"8087"`

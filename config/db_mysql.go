@@ -31,7 +31,7 @@ func MysqlOneClose() {
 
 
 //
-func NewMysqlConnect(conf *database) *sql.DB {
+func NewMysqlConnect(conf *Database) *sql.DB {
 	connStr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=true",
 		conf.Username,
 		conf.Password,

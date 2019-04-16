@@ -31,7 +31,7 @@ func ClickHouseOneClose() {
 }
 
 //
-func NewClickHouseConnect(conf *database) *sql.DB {
+func NewClickHouseConnect(conf *Database) *sql.DB {
 	dataSourceName := fmt.Sprintf(
 		"tcp://%s:%d?debug=%d&database=%s&read_timeout=30&write_timeout=30&password=%s&username=%s",
 		conf.Ip,
