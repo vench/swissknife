@@ -45,6 +45,16 @@ func (a *WebApp) UserValueInt(ctx *fasthttp.RequestCtx, key string) (val int64) 
 }
 
 //
+func (a *WebApp) UserValueUInt(ctx *fasthttp.RequestCtx, key string) (val uint64) {
+	valStr := fmt.Sprintf(`%s`, ctx.UserValue(key))
+	val, err := strconv.ParseUint(valStr, 10,64)
+	if err != nil {
+		val = 0
+	}
+	return val
+}
+
+//
 func (a *WebApp) UserValueString(ctx *fasthttp.RequestCtx, key string) (string) {
 	s :=  ctx.UserValue(key)
 	if s == nil {
