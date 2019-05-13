@@ -27,6 +27,7 @@ func ClickHouseOneConnect() *sql.DB {
 func ClickHouseOneClose() {
 	if clickHouseConnectOpen {
 		clickHouseConnect.Close()
+		clickHouseConnectOpen = false
 	}
 }
 
