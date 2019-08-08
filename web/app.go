@@ -21,7 +21,7 @@ type WebApp struct {
 }
 
 //
-func (a *WebApp) RenderJSONFastHttp(ctx *fasthttp.RequestCtx) {
+func (a *WebApp) RenderJSONFastHttp(ctx *fasthttp.RequestCtx) error {
 	ctx.Response.Header.SetCanonical([]byte(`Content-Type`), []byte(`application/json`))
 	ctx.SetStatusCode(a.Response.Code)
 
@@ -29,9 +29,10 @@ func (a *WebApp) RenderJSONFastHttp(ctx *fasthttp.RequestCtx) {
 	if err != nil {
 		ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 		ctx.SetBody([]byte(`Internal Server Error`))
-		return
+		return err
 	}
 	ctx.SetBody(response)
+	return nil
 }
 
 //
